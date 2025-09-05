@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 🔍 Phishing URL Detector
 
 A simple web application to detect **phishing websites** using a trained machine learning model with a **Flask backend API** and a clean **HTML/CSS/JavaScript frontend**.
@@ -28,3 +29,8 @@ A simple web application to detect **phishing websites** using a trained machine
 ```bash
 git clone https://github.com/your-username/phishing-url-detector.git
 cd phishing-url-detector
+=======
+#AlertaPhish
+
+URL Phishing Detector is a web app that checks if a website URL is safe or a phishing attempt. It analyzes URL patterns and highlights results with a clear, interactive interface, helping users quickly identify malicious sites and stay protected online.
+>>>>>>> 2036ded927e9724d007a58c38869593b13a14e05

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Phishing URL Detector</title>
+  <style>
+   body {
+  font-family: Arial, sans-serif;
+  background: url("img.jpeg") no-repeat center center fixed;
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  margin: 0;
+}
+
+
+    h2 {
+      color: #333;
+      margin-bottom: 20px;
+      font-family: Georgia, 'Times New Roman', Times, serif;
+    }
+
+    .card {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      width: 400px;
+    }
+
+    input[type="text"] {
+      padding: 10px;
+      width: 80%;
+      border: 2px solid #ddd;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      font-size: 14px;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: rgb(76, 27, 167);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background-color: #6383c0;
+    }
+
+    #output {
+      margin-top: 20px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .phishing {
+      color: red;
+    }
+
+    .legitimate {
+      color: green;
+    }
+  </style>
+
+  <script>
+    async function classify() {
+      let url = document.getElementById("url").value;
+
+      let response = await fetch("http://127.0.0.1:5000/api/classify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url: url })
+      });
+
+      let result = await response.json();
+      let output = document.getElementById("output");
+
+      if (result.prediction === 1) {
+        output.innerText = "🚨 Phishing Website Detected!";
+        output.className = "phishing";
+      } else {
+        output.innerText = "✅ Legitimate Website";
+        output.className = "legitimate";
+      }
+    }
+  </script>
+</head>
+<body>
+  <div class="card">
+    <h2>🔍 ALERTA PHISH</h2>
+    <input type="text" id="url" placeholder="https://example.com">
+    <br>
+    <button onclick="classify()">Check</button>
+    <h3 id="output"></h3>
+  </div>
+</body>
+</html>

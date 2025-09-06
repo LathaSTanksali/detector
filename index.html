@@ -16,7 +16,6 @@
   margin: 0;
 }
 
-
     h2 {
       color: #333;
       margin-bottom: 20px;
@@ -24,7 +23,7 @@
     }
 
     .card {
-      background: white;
+      background: lightblue;
       padding: 30px;
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
@@ -71,6 +70,7 @@
     }
   </style>
 
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
     async function classify() {
       let url = document.getElementById("url").value;
@@ -83,6 +83,7 @@
 
       let result = await response.json();
       let output = document.getElementById("output");
+      let explain = document.getElementById("explain");
 
       if (result.prediction === 1) {
         output.innerText = "🚨 Phishing Website Detected!";
@@ -91,6 +92,34 @@
         output.innerText = "✅ Legitimate Website";
         output.className = "legitimate";
       }
+
+      explain.innerText = "Key indicators: " + (result.top_features.join(", ") || "N/A");
+
+      updateStats();
+    }
+
+    async function updateStats() {
+      let res = await fetch("http://127.0.0.1:5000/api/stats");
+      let stats = await res.json();
+
+      chart.data.datasets[0].data = [stats.phishing, stats.legitimate];
+      chart.update();
+    }
+
+    let ctx;
+    let chart;
+    window.onload = function() {
+      ctx = document.getElementById("chart").getContext("2d");
+      chart = new Chart(ctx, {
+        type: "doughnut",
+        data: {
+          labels: ["Phishing", "Legitimate"],
+          datasets: [{
+            data: [0, 0],
+            backgroundColor: ["red", "green"]
+          }]
+        }
+      });
     }
   </script>
 </head>
@@ -101,6 +130,11 @@
     <br>
     <button onclick="classify()">Check</button>
     <h3 id="output"></h3>
+    <p id="explain"></p>
+    <div>
+      <h4>📊 Dashboard</h4>
+      <canvas id="chart" width="300" height="300"></canvas>
+    </div>
   </div>
 </body>
 </html>
